@@ -5,6 +5,7 @@ using NanoFinanceTracker.Core.Infrastructure.Orleans.GrainInterfaces;
 using Orleans;
 using Orleans.EventSourcing;
 using Orleans.EventSourcing.CustomStorage;
+using Orleans.Serialization.Codecs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,29 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             _aggregateRepository = aggregateRepository;
             _logger = logger;
         }
+
+        public Task<int> GetBalance()
+        {
+            return Task.FromResult(this.State.Balance);
+        }
+
         public async Task AddExpense(int amount, string category, string description, DateTimeOffset transactionDate)
         {
             RaiseEvent(new ExpenseAdded() {
+                FinancialMonthId = this.GetPrimaryKeyString(),
+                Amount = amount,
+                Category = category,
+                Description = description,
+                TransactionDate = transactionDate,
+                CreatedAt = DateTimeOffset.Now
+            });
+            await ConfirmEvents();
+        }
+
+        public async Task AddIncome(int amount, string category, string description, DateTimeOffset transactionDate)
+        {
+            RaiseEvent(new IncomeAdded()
+            {
                 FinancialMonthId = this.GetPrimaryKeyString(),
                 Amount = amount,
                 Category = category,
@@ -103,7 +124,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             var idSpan = id.AsSpan();
             var strYear = idSpan.Slice(0, 4);
             var strMonth = idSpan.Slice(5, 2);
-            var userId = idSpan.Slice(8, idSpan.Length).ToString();
+            var userId = idSpan.Slice(8, idSpan.Length - 8).ToString();
 
             int.TryParse(strYear, out int year);    
             int.TryParse(strMonth, out int month);

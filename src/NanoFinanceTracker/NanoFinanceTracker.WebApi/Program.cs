@@ -8,7 +8,15 @@ using NanoFinanceTracker.Core.Infrastructure.Marten;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 var isDevelopment = builder.Environment.IsDevelopment();
+if (!isDevelopment)
+{
+    builder.Logging.ClearProviders();
+    builder.Logging.AddJsonConsole();
+}
+
+
 // Add orleans
 builder.Host.UseOrleans( async siloBuilder =>
 {
@@ -45,6 +53,7 @@ builder.Services.AddMarten(options =>
     // Establish the connection string to your Marten database
     options.Connection(builder.Configuration.GetConnectionString("Marten")!);
 
+    options.Events.StreamIdentity = Marten.Events.StreamIdentity.AsString;
     // Specify that we want to use STJ as our serializer
     options.UseSystemTextJsonForSerialization();
 

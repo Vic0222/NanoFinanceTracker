@@ -27,15 +27,24 @@ namespace NanoFinanceTracker.Core.Infrastructure.Marten
         {
             await using var session = await _store.LightweightSerializableSessionAsync(token: cancellationToken);
             
-            session.Events.Append(streamId, version, events);
+            session.Events.Append(streamId, version + events.Count(), events);
             await session.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<(long, TEvent)>> LoadEventsAsync<TEvent>(string id, int? version = null, CancellationToken cancellationToken = default) where TEvent : class
         {
-            await using var session = await _store.LightweightSerializableSessionAsync(token: cancellationToken);
-            var events = await session.Events.FetchStreamAsync(id, version ?? 0);
-            return Map<TEvent>(events);
+            try
+            {
+                await using var session = await _store.LightweightSerializableSessionAsync(token: cancellationToken);
+                var events = await session.Events.FetchStreamAsync(id, version ?? 0);
+                return Map<TEvent>(events);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading events");
+                throw;
+            }
+            
         }
 
         private IEnumerable<(long, TEvent)> Map<TEvent>(IReadOnlyList<IEvent> events) where TEvent : class

@@ -8,6 +8,12 @@
 
         public int Year { get; set; }
 
+        public int Balance { get; set; }
+
+        public int TotalExpense { get; set; }
+
+        public int TotalIncome { get; set; }
+
         public List<FinancialTransaction> FinancialTransactions { get; set; } = new List<FinancialTransaction>();
 
         public void Apply(ExpenseAdded @event)
@@ -20,6 +26,9 @@
                 TransactionDate = @event.TransactionDate,
                 TransactionType = TransactionType.Expense.ToString(),
             });
+
+            TotalExpense += @event.Amount;
+            Balance -= @event.Amount;
 
         }
 
@@ -35,6 +44,8 @@
                 TransactionType = TransactionType.Income.ToString(),
             });
 
+            TotalIncome += @event.Amount;
+            Balance += @event.Amount;
         }
     }
 

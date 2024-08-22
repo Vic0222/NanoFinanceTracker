@@ -3,4 +3,12 @@
 GET {{NanoFinanceTracker.WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
+######
+GET https://localhost:7268/api/FinancialMonth/2024/8
+
 ###
+POST https://localhost:7268/api/FinancialMonth/2024/8/incomes
+
+
+###
+POST https://localhost:7268/api/FinancialMonth/2024/8/expenses
