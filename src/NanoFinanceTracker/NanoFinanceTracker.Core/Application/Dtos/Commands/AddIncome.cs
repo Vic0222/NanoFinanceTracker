@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NanoFinanceTracker.Core.Application.Dtos.Commands
 {
-    public class AddExpense
+    public class AddIncome
     {
         public int Amount { get; set; }
         public string Description { get; set; } = string.Empty;

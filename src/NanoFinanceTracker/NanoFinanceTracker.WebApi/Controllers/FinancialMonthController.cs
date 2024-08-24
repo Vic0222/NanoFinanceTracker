@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NanoFinanceTracker.Core.Application.Dtos.Commands;
 using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
 using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace NanoFinanceTracker.WebApi.Controllers
 {
@@ -41,10 +42,16 @@ namespace NanoFinanceTracker.WebApi.Controllers
         }
 
         [HttpPost("{year}/{month}/incomes")]
-        public async Task<IActionResult> PostIncome(int year, int month)
+        public async Task<IActionResult> PostIncome([FromServices] IValidator<AddIncome> validator,int year, int month, [FromBody] AddIncome command)
         {
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+                return this.ValidationProblem(ModelState);
+            }
             var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month));
-            await grain.AddIncome(500000, "test", "test", DateTimeOffset.Now);
+            await grain.AddIncome(command.Amount, command.Category, command.Description, command.TransactionDate);
             return Ok(await grain.GetBalance());
         }
 
