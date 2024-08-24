@@ -12,3 +12,11 @@ POST https://localhost:7268/api/FinancialMonth/2024/8/incomes
 
 ###
 POST https://localhost:7268/api/FinancialMonth/2024/8/expenses
+content-type: application/json
+
+{
+  "amount": 100,
+  "description": "string",
+  "category": "string",
+  "transactionDate": "2024-08-24T14:28:04.256Z"
+}
