@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 using NanoFinanceTracker.Core.Domain.DomainInteraces;
-using NanoFinanceTracker.Core.Infrastructure.Orleans.GrainInterfaces;
+using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
 using Orleans;
 using Orleans.EventSourcing;
 using Orleans.EventSourcing.CustomStorage;

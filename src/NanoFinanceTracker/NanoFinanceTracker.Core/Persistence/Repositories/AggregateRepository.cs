@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NanoFinanceTracker.Core.Infrastructure.Marten
+namespace NanoFinanceTracker.Core.Persistence.Repositories
 {
     public sealed class AggregateRepository : IAggregateRepository
     {
@@ -26,7 +26,7 @@ namespace NanoFinanceTracker.Core.Infrastructure.Marten
         public async Task StoreAsync(string streamId, int version, IEnumerable<object> events, CancellationToken cancellationToken = default)
         {
             await using var session = await _store.LightweightSerializableSessionAsync(token: cancellationToken);
-            
+
             session.Events.Append(streamId, version + events.Count(), events);
             await session.SaveChangesAsync(cancellationToken);
         }
@@ -44,7 +44,7 @@ namespace NanoFinanceTracker.Core.Infrastructure.Marten
                 _logger.LogError(ex, "Error loading events");
                 throw;
             }
-            
+
         }
 
         private IEnumerable<(long, TEvent)> Map<TEvent>(IReadOnlyList<IEvent> events) where TEvent : class

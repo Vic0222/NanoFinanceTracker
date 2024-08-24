@@ -4,7 +4,7 @@ using System;
 using Marten;
 using Weasel.Core;
 using NanoFinanceTracker.Core.Domain.DomainInteraces;
-using NanoFinanceTracker.Core.Infrastructure.Marten;
+using NanoFinanceTracker.Core.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

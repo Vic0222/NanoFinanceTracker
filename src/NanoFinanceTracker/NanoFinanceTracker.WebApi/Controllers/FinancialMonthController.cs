@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
-using NanoFinanceTracker.Core.Infrastructure.Orleans.GrainInterfaces;
+using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
 
 namespace NanoFinanceTracker.WebApi.Controllers
 {

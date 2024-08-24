@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NanoFinanceTracker.Core.Infrastructure.Orleans.GrainInterfaces
+namespace NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces
 {
     public interface IFinancialMonthGrain : IGrainWithStringKey
     {
