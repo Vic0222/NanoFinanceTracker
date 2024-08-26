@@ -8,6 +8,7 @@ using NanoFinanceTracker.Core.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using NanoFinanceTracker.Core.Application.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,17 @@ builder.Services.AddMarten(options =>
 // Add services to the container.
 builder.Services.AddTransient<IAggregateRepository, AggregateRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddExpenseValidator>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    builder.Configuration.Bind("Identity", options);
+});
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

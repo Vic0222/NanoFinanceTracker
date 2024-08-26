@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NanoFinanceTracker.Core.Application.Dtos.Commands;
 using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
 using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace NanoFinanceTracker.WebApi.Controllers
 {
@@ -19,14 +21,21 @@ namespace NanoFinanceTracker.WebApi.Controllers
             _clusterClient = clusterClient;
         }
 
+        [Authorize]
         [HttpGet("{year}/{month}")]
         public async Task<IActionResult> Get(int year, int month)
         {
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month));
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
             
             return Ok(await grain.GetBalance());
         }
 
+        [Authorize]
         [HttpPost("{year}/{month}/expenses")]
         public async Task<IActionResult> PostExpense([FromServices] IValidator<AddExpense> validator, int year, int month,[FromBody] AddExpense command)
         {
@@ -36,11 +45,17 @@ namespace NanoFinanceTracker.WebApi.Controllers
                 validationResult.AddToModelState(ModelState);
                 return this.ValidationProblem(ModelState);
             }
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month));
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
             await grain.AddExpense(command.Amount, command.Category, command.Description, command.TransactionDate);
             return Ok(await grain.GetBalance());
         }
 
+        [Authorize]
         [HttpPost("{year}/{month}/incomes")]
         public async Task<IActionResult> PostIncome([FromServices] IValidator<AddIncome> validator,int year, int month, [FromBody] AddIncome command)
         {
@@ -48,16 +63,26 @@ namespace NanoFinanceTracker.WebApi.Controllers
             if (!validationResult.IsValid)
             {
                 validationResult.AddToModelState(ModelState);
-                return this.ValidationProblem(ModelState);
+                return ValidationProblem(ModelState);
             }
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month));
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
             await grain.AddIncome(command.Amount, command.Category, command.Description, command.TransactionDate);
             return Ok(await grain.GetBalance());
         }
 
-        private static string BuildGrainId(int year, int month)
+        private string? GetUserId()
         {
-            return $"{year.ToString("0000")}-{month.ToString("00")}-userid";
+            return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        private static string BuildGrainId(int year, int month, string userId)
+        {
+            return $"{year.ToString("0000")}-{month.ToString("00")}-{userId}";
         }
     }
 }

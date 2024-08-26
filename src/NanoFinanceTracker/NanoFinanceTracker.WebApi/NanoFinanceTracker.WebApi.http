@@ -1,17 +1,21 @@
-@NanoFinanceTracker.WebApi_HostAddress = http://localhost:5249
+@Host = http://localhost:5249
 
-GET {{NanoFinanceTracker.WebApi_HostAddress}}/weatherforecast/
+@Token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imp0dHgtRDlPWWFmdi14ZlpjaXNCcCJ9.eyJpc3MiOiJodHRwczovL2Rldi04Y3ZxNGJqbzAydnltOHpxLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJoWEM4UHdTVEpHQ0M2WkkzSU1Sb3kxM2hrQVFSd21zakBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2OC8iLCJpYXQiOjE3MjQ2NzQzMTIsImV4cCI6MTcyNDc2MDcxMiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiaFhDOFB3U1RKR0NDNlpJM0lNUm95MTNoa0FRUndtc2oifQ.TA639PdKOKCZyt-aDEu4ukWt79Ak9de2uimiEwFtfRFGxiq6Klg9KP8bmWdqkw3spIK2NzWZlEFMlH-0XtnFTZTzRrvUf2DrtA3gx5OsTzAPkW7izVNoJKLldDX4H82jg9LmgWAtIt87miUvaCM0AUQ3ZOwuUdyV_cYmfUQDYdrNaEvxfpTbmpo-0qlWYoeKqhjCNbfq5KN6YTEvlVnUl29jaQBchdMV7jqccBWH3CUOB_DtYLDREIxhzobeFyE435kImaE7hA_QMg0mGdeTIvWFlATBW29ME98ym2qS6A85TFbyuM-wVmQ-1MDZ5tHnqEAemsgiNsX_gGz67UflxQ
+
+GET {{Host}}/weatherforecast/
 Accept: application/json
 
 ######
 GET https://localhost:7268/api/FinancialMonth/2024/8
+Authorization: Bearer {{Token}}
 
 ###
 POST https://localhost:7268/api/FinancialMonth/2024/8/incomes
 content-type: application/json
+Authorization: Bearer {{Token}}
 
 {
-  "amount": 0,
+  "amount": 100,
   "description": "string",
   "category": "string",
   "transactionDate": "2024-08-24T14:28:04.256Z"
@@ -20,6 +24,7 @@ content-type: application/json
 ###
 POST https://localhost:7268/api/FinancialMonth/2024/8/expenses
 content-type: application/json
+Authorization: Bearer {{Token}}
 
 {
   "amount": 100,
@@ -27,3 +32,6 @@ content-type: application/json
   "category": "string",
   "transactionDate": "2024-08-24T14:28:04.256Z"
 }
+
+### Login
+
