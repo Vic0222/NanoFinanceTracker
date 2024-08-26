@@ -32,12 +32,12 @@ namespace NanoFinanceTracker.WebApi.Controllers
             }
             var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
             
-            return Ok(await grain.GetBalance());
+            return Ok(await grain.GetStateView());
         }
 
         [Authorize]
         [HttpPost("{year}/{month}/expenses")]
-        public async Task<IActionResult> PostExpense([FromServices] IValidator<AddExpense> validator, int year, int month,[FromBody] AddExpense command)
+        public async Task<IActionResult> PostExpense([FromServices] IValidator<AddExpenseCommand> validator, int year, int month,[FromBody] AddExpenseCommand command)
         {
             var validationResult = await validator.ValidateAsync(command);
             if (!validationResult.IsValid)
@@ -51,13 +51,13 @@ namespace NanoFinanceTracker.WebApi.Controllers
                 return Unauthorized();
             }
             var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
-            await grain.AddExpense(command.Amount, command.Category, command.Description, command.TransactionDate);
-            return Ok(await grain.GetBalance());
+            await grain.AddExpense(command);
+            return Ok(await grain.GetStateView());
         }
 
         [Authorize]
         [HttpPost("{year}/{month}/incomes")]
-        public async Task<IActionResult> PostIncome([FromServices] IValidator<AddIncome> validator,int year, int month, [FromBody] AddIncome command)
+        public async Task<IActionResult> PostIncome([FromServices] IValidator<AddIncomeCommand> validator, int year, int month, [FromBody] AddIncomeCommand command)
         {
             var validationResult = await validator.ValidateAsync(command);
             if (!validationResult.IsValid)
@@ -71,8 +71,8 @@ namespace NanoFinanceTracker.WebApi.Controllers
                 return Unauthorized();
             }
             var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
-            await grain.AddIncome(command.Amount, command.Category, command.Description, command.TransactionDate);
-            return Ok(await grain.GetBalance());
+            await grain.AddIncome(command);
+            return Ok(await grain.GetStateView());
         }
 
         private string? GetUserId()

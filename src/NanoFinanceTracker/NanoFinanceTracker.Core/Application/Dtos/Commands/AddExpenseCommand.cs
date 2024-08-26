@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace NanoFinanceTracker.Core.Application.Dtos.Commands
 {
-    public class AddExpense
+    [GenerateSerializer]
+    public class AddExpenseCommand
     {
+        [Id(0)]
         public int Amount { get; set; }
+        [Id(1)]
         public string Description { get; set; } = string.Empty;
+        [Id(2)]
         public string Category { get; set; } = string.Empty;
+        [Id(3)]
         public DateTimeOffset TransactionDate { get; set; }
     }
 }

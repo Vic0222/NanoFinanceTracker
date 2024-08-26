@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NanoFinanceTracker.Core.Application.Validators
 {
-    public class AddExpenseValidator : AbstractValidator<AddExpense>
+    public class AddExpenseValidator : AbstractValidator<AddExpenseCommand>
     {
         public AddExpenseValidator()
         {

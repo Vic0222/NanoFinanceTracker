@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NanoFinanceTracker.Core.Application.Validators
 {
-    public class AddIncomeValidator : AbstractValidator<AddIncome>
+    public class AddIncomeValidator : AbstractValidator<AddIncomeCommand>
     {
         public AddIncomeValidator()
         {

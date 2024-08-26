@@ -1,4 +1,6 @@
-﻿using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
+﻿using NanoFinanceTracker.Core.Application.Dtos.Commands;
+using NanoFinanceTracker.Core.Application.Dtos.Views;
+using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
 using Orleans;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,8 @@ namespace NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces
 {
     public interface IFinancialMonthGrain : IGrainWithStringKey
     {
-        Task AddExpense(int amount, string category, string description, DateTimeOffset transactionDate);
-        Task AddIncome(int amount, string category, string description, DateTimeOffset transactionDate);
-        Task<int> GetBalance();
+        Task AddExpense(AddExpenseCommand command);
+        Task AddIncome(AddIncomeCommand command);
+        Task<FinancialMonthView> GetStateView();
     }
 }

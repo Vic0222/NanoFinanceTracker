@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
+using NanoFinanceTracker.Core.Application.Dtos.Commands;
+using NanoFinanceTracker.Core.Application.Dtos.Views;
 using NanoFinanceTracker.Core.Domain.DomainInteraces;
 using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
 using Orleans;
@@ -25,33 +27,42 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             _logger = logger;
         }
 
-        public Task<int> GetBalance()
+        public Task<FinancialMonthView> GetStateView()
         {
-            return Task.FromResult(this.State.Balance);
+            var view = new FinancialMonthView()
+            {
+                Year = State.Year,
+                Month = State.Month,
+                Balance = State.Balance,
+                TotalExpense = State.TotalExpense,
+                TotalIncome = State.TotalIncome,
+                UserId = State.UserId
+            };
+            return Task.FromResult(view);
         }
 
-        public async Task AddExpense(int amount, string category, string description, DateTimeOffset transactionDate)
+        public async Task AddExpense(AddExpenseCommand command)
         {
             RaiseEvent(new ExpenseAdded() {
                 FinancialMonthId = this.GetPrimaryKeyString(),
-                Amount = amount,
-                Category = category,
-                Description = description,
-                TransactionDate = transactionDate,
+                Amount = command.Amount,
+                Category = command.Category,
+                Description = command.Description,
+                TransactionDate = command.TransactionDate,
                 CreatedAt = DateTimeOffset.Now
             });
             await ConfirmEvents();
         }
 
-        public async Task AddIncome(int amount, string category, string description, DateTimeOffset transactionDate)
+        public async Task AddIncome(AddIncomeCommand command)
         {
             RaiseEvent(new IncomeAdded()
             {
                 FinancialMonthId = this.GetPrimaryKeyString(),
-                Amount = amount,
-                Category = category,
-                Description = description,
-                TransactionDate = transactionDate,
+                Amount = command.Amount,
+                Category = command.Category,
+                Description = command.Description,
+                TransactionDate = command.TransactionDate,
                 CreatedAt = DateTimeOffset.Now
             });
             await ConfirmEvents();
