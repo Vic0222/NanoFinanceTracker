@@ -80,6 +80,7 @@ builder.Services.AddAuthentication(options =>
 }).AddJwtBearer(options =>
 {
     builder.Configuration.Bind("Identity", options);
+    options.TokenValidationParameters.ValidateAudience = false;
 });
 
 
