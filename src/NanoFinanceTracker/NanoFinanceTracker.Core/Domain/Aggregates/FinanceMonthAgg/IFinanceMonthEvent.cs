@@ -1,13 +1,13 @@
-﻿namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
+﻿namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
 {
-    public interface IFinancialMonthEvent
+    public interface IFinanceMonthEvent
     {
 
     }
 
-    public class ExpenseAdded : IFinancialMonthEvent
+    public class ExpenseAdded : IFinanceMonthEvent
     {
-        public string FinancialMonthId { get; set; } = string.Empty;
+        public string FinanceMonthId { get; set; } = string.Empty;
 
         public int Amount { get; set; }
 
@@ -21,9 +21,9 @@
 
     }
 
-    public class IncomeAdded : IFinancialMonthEvent
+    public class IncomeAdded : IFinanceMonthEvent
     {
-        public string FinancialMonthId { get; set; } = string.Empty;
+        public string FinanceMonthId { get; set; } = string.Empty;
 
         public int Amount { get; set; }
 

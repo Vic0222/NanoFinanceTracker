@@ -1,6 +1,6 @@
-﻿namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
+﻿namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
 {
-    public class FinancialMonthState
+    public class FinanceMonthState
     {
         public string UserId { get; set; } = string.Empty;
 

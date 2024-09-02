@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NanoFinanceTracker.Core.Application.Dtos.Views
 {
     [GenerateSerializer]
-    public class FinancialMonthView
+    public class FinanceMonthView
     {
         [Id(0)]
         public string UserId { get; set; } = string.Empty;

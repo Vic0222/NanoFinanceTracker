@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NanoFinanceTracker.Core.Application.Dtos.Commands;
-using NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg;
+using NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg;
 using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -12,11 +12,11 @@ namespace NanoFinanceTracker.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FinancialMonthController : ControllerBase
+    public class FinanceMonthController : ControllerBase
     {
         private readonly IClusterClient _clusterClient;
 
-        public FinancialMonthController(IClusterClient clusterClient)
+        public FinanceMonthController(IClusterClient clusterClient)
         {
             _clusterClient = clusterClient;
         }
@@ -30,7 +30,7 @@ namespace NanoFinanceTracker.WebApi.Controllers
             {
                 return Unauthorized();
             }
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
+            var grain = _clusterClient.GetGrain<IFinanceMonthGrain>(BuildGrainId(year, month, userId));
             
             return Ok(await grain.GetStateView());
         }
@@ -50,7 +50,7 @@ namespace NanoFinanceTracker.WebApi.Controllers
             {
                 return Unauthorized();
             }
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
+            var grain = _clusterClient.GetGrain<IFinanceMonthGrain>(BuildGrainId(year, month, userId));
             await grain.AddExpense(command);
             return Ok(await grain.GetStateView());
         }
@@ -70,7 +70,7 @@ namespace NanoFinanceTracker.WebApi.Controllers
             {
                 return Unauthorized();
             }
-            var grain = _clusterClient.GetGrain<IFinancialMonthGrain>(BuildGrainId(year, month, userId));
+            var grain = _clusterClient.GetGrain<IFinanceMonthGrain>(BuildGrainId(year, month, userId));
             await grain.AddIncome(command);
             return Ok(await grain.GetStateView());
         }

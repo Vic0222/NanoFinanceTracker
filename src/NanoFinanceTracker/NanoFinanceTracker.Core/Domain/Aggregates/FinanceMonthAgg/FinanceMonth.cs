@@ -14,22 +14,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
+namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
 {
-    public class FinancialMonth : JournaledGrain<FinancialMonthState, IFinancialMonthEvent>, IAggregateRoot, IFinancialMonthGrain, ICustomStorageInterface<FinancialMonthState, IFinancialMonthEvent>
+    public class FinanceMonth : JournaledGrain<FinanceMonthState, IFinanceMonthEvent>, IAggregateRoot, IFinanceMonthGrain, ICustomStorageInterface<FinanceMonthState, IFinanceMonthEvent>
     {
         private readonly IAggregateRepository _aggregateRepository;
-        private readonly ILogger<FinancialMonth> _logger;
+        private readonly ILogger<FinanceMonth> _logger;
 
-        public FinancialMonth(IAggregateRepository aggregateRepository, ILogger<FinancialMonth> logger)
+        public FinanceMonth(IAggregateRepository aggregateRepository, ILogger<FinanceMonth> logger)
         {
             _aggregateRepository = aggregateRepository;
             _logger = logger;
         }
 
-        public Task<FinancialMonthView> GetStateView()
+        public Task<FinanceMonthView> GetStateView()
         {
-            var view = new FinancialMonthView()
+            var view = new FinanceMonthView()
             {
                 Year = State.Year,
                 Month = State.Month,
@@ -44,7 +44,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
         public async Task AddExpense(AddExpenseCommand command)
         {
             RaiseEvent(new ExpenseAdded() {
-                FinancialMonthId = this.GetPrimaryKeyString(),
+                FinanceMonthId = this.GetPrimaryKeyString(),
                 Amount = command.Amount,
                 Category = command.Category,
                 Description = command.Description,
@@ -58,7 +58,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
         {
             RaiseEvent(new IncomeAdded()
             {
-                FinancialMonthId = this.GetPrimaryKeyString(),
+                FinanceMonthId = this.GetPrimaryKeyString(),
                 Amount = command.Amount,
                 Category = command.Category,
                 Description = command.Description,
@@ -68,7 +68,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             await ConfirmEvents();
         }
 
-        public async Task<bool> ApplyUpdatesToStorage(IReadOnlyList<IFinancialMonthEvent> updates, int expectedVersion)
+        public async Task<bool> ApplyUpdatesToStorage(IReadOnlyList<IFinanceMonthEvent> updates, int expectedVersion)
         {
             try
             {
@@ -82,25 +82,25 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             }
         }
 
-        public async Task<KeyValuePair<int, FinancialMonthState>> ReadStateFromStorage()
+        public async Task<KeyValuePair<int, FinanceMonthState>> ReadStateFromStorage()
         {
-            (int year, int month, string userId) = ParseFinancialMonthId(this.GetPrimaryKeyString());
+            (int year, int month, string userId) = ParseFinanceMonthId(this.GetPrimaryKeyString());
 
-            Guard.IsGreaterThan(year, 0, "FinancialMonth - Year");
-            Guard.IsBetween(month, 1, 12, "FinancialMonth - Month");
-            Guard.IsNotNullOrEmpty(userId, "FinancialMonth - UserId");
+            Guard.IsGreaterThan(year, 0, "FinanceMonth - Year");
+            Guard.IsBetween(month, 1, 12, "FinanceMonth - Month");
+            Guard.IsNotNullOrEmpty(userId, "FinanceMonth - UserId");
 
-            var state = new FinancialMonthState()
+            var state = new FinanceMonthState()
             {
                 Year = year,
                 Month = month,
                 UserId = userId
             };
 
-            var events = await _aggregateRepository.LoadEventsAsync<IFinancialMonthEvent>(this.GetPrimaryKeyString());
+            var events = await _aggregateRepository.LoadEventsAsync<IFinanceMonthEvent>(this.GetPrimaryKeyString());
             if (!events.Any())
             {
-                return new KeyValuePair<int, FinancialMonthState>(0, state);
+                return new KeyValuePair<int, FinanceMonthState>(0, state);
             }
 
             var orderedEvents = events.OrderBy(e => e.version).ToList();
@@ -121,9 +121,9 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinancialMonthAgg
             }
 
             long version = orderedEvents.LastOrDefault().version;
-            return new KeyValuePair<int, FinancialMonthState>((int)version, state);
+            return new KeyValuePair<int, FinanceMonthState>((int)version, state);
         }
-        private static (int year, int month, string userId) ParseFinancialMonthId(string id)
+        private static (int year, int month, string userId) ParseFinanceMonthId(string id)
         {
             
             if (id.Length < 9)

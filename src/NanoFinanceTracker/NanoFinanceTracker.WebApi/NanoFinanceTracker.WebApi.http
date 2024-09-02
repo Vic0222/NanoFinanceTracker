@@ -6,11 +6,11 @@ GET {{Host}}/weatherforecast/
 Accept: application/json
 
 ######
-GET https://localhost:7268/api/FinancialMonth/2024/8
+GET https://localhost:7268/api/FinanceMonth/2024/8
 Authorization: Bearer {{Token}}
 
 ###
-POST https://localhost:7268/api/FinancialMonth/2024/8/incomes
+POST https://localhost:7268/api/FinanceMonth/2024/8/incomes
 content-type: application/json
 Authorization: Bearer {{Token}}
 
@@ -22,7 +22,7 @@ Authorization: Bearer {{Token}}
 }
 
 ###
-POST https://localhost:7268/api/FinancialMonth/2024/8/expenses
+POST https://localhost:7268/api/FinanceMonth/2024/8/expenses
 content-type: application/json
 Authorization: Bearer {{Token}}
 
