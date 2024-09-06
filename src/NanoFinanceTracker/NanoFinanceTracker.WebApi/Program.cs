@@ -39,7 +39,13 @@ builder.Host.UseOrleans( async siloBuilder =>
     }
     else
     {
-        siloBuilder.UseLocalhostClustering();
+        // Use ADO.NET for clustering
+        Console.WriteLine("Using npsql");
+        siloBuilder.UseAdoNetClustering(options =>
+        {
+            options.Invariant = "Npgsql";
+            options.ConnectionString = siloBuilder.Configuration.GetConnectionString("GrainStorage");
+        });
     }
 
 
@@ -66,6 +72,11 @@ builder.Services.AddMarten(options =>
     if (builder.Environment.IsDevelopment())
     {
         options.AutoCreateSchemaObjects = AutoCreate.All;
+    }
+    else
+    {
+        options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+
     }
 });
 

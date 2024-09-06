@@ -5,15 +5,19 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>816701a7-f83c-4ce3-aaa8-469844379818</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
     <PackageReference Include="Marten" Version="7.26.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="8.2.0" />
     <PackageReference Include="Microsoft.Orleans.EventSourcing" Version="8.2.0" />
     <PackageReference Include="Microsoft.Orleans.Sdk" Version="8.2.0" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="8.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
