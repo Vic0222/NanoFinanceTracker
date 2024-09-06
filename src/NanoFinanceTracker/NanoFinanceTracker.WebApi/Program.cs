@@ -44,7 +44,7 @@ builder.Host.UseOrleans( async siloBuilder =>
         siloBuilder.UseAdoNetClustering(options =>
         {
             options.Invariant = "Npgsql";
-            options.ConnectionString = siloBuilder.Configuration.GetConnectionString("GrainStorage");
+            options.ConnectionString = siloBuilder.Configuration.GetConnectionString("Clustering");
         });
     }
 
