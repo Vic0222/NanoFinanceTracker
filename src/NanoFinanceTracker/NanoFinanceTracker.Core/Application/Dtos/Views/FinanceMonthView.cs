@@ -12,6 +12,9 @@ namespace NanoFinanceTracker.Core.Application.Dtos.Views
         [Id(0)]
         public string UserId { get; set; } = string.Empty;
 
+        [Id(6)]
+        public string Account { get; set; } = string.Empty;
+
         [Id(1)]
         public int Month { get; set; }
 

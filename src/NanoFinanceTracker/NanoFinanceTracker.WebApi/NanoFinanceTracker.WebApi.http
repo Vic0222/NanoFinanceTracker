@@ -1,16 +1,16 @@
 @Host = http://localhost:5249
 
-@Token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imp0dHgtRDlPWWFmdi14ZlpjaXNCcCJ9.eyJpc3MiOiJodHRwczovL2Rldi04Y3ZxNGJqbzAydnltOHpxLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NWU4MmViYmU3MDdjYmMzZWVhNWQ0ODQiLCJhdWQiOlsibmFuby1maW5hbmNlLXRyYWNrZXIiLCJodHRwczovL2Rldi04Y3ZxNGJqbzAydnltOHpxLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3MjUyOTIxNDQsImV4cCI6MTcyNTM3ODU0NCwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSIsImF6cCI6Ilg3SVF0aFNpakJMWHh0b09SUFFTbjFCOUxtaU1sUDRJIn0.IWBxW9qzzFEtd8Q77YWb8hkyEKlPXhT2cWZYkxWYDFjMJBb4ivEHFXwyD9CNpZvR85Tg5Kgz7YmAwrGKWiSwvxw0s4O1rBuL9LrIOjh2Fe4GecBOacIyDLFY85GPSQWZfYnL0NjWGzfkeC7GT1ugG7BoqdjsrSS9vJQuSfhCNNUSn0ci0n7ESNPfWO1EATPVCJvZtLurUldg6acwiawge3VDJcNM3kKhYQc7XID7panxGldjU3UNKGE4QL-34TgcjtW4LYM_ohtq8yyuaxmutc3zZ--99robKdl0tKBcK0LSO4qYHHrrMXED_5-P9ZTO3iAuGnCgpKYQ6QFG64rnSA
-
+@Token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imp0dHgtRDlPWWFmdi14ZlpjaXNCcCJ9.eyJpc3MiOiJodHRwczovL2Rldi04Y3ZxNGJqbzAydnltOHpxLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NWU4MmViYmU3MDdjYmMzZWVhNWQ0ODQiLCJhdWQiOlsibmFuby1hc3Npc3RhbnQiLCJodHRwczovL2Rldi04Y3ZxNGJqbzAydnltOHpxLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3MjYxNTAwMDIsImV4cCI6MTcyNjIzNjQwMiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSIsImF6cCI6Ilg3SVF0aFNpakJMWHh0b09SUFFTbjFCOUxtaU1sUDRJIn0.SRUcgCmUVag-b0Pd_3qBgBX3BWI7riO2yc475YNyWBpFRyqPL3en9GMm7pSMVZo3CsK173cGJe_kvI7XHB0WBYXvQ3rPhXl0cEsARJFBBRrbjAsZZRf3CTD_QUGqEg8klyuZwU4q17N0NcO4rLqM_fLiVbqYEjMV9Gh5luTRkb8l_MIHFtL4wDNlmDct_TG_WqqlqTWfHDu4fr-4PP7Lpct-xnINA1N_6oAXG3X497yBJZtO8TobjslWKmGQS0sjUtVROgjBEBrNuYkKBdClQaDXuzIk3x_Xrc6mIMfBCLE4yq-hRmAhn5UXbiIHv4n_bym5cQgj9-mdkJO2R0CWsw
+@account = default
 GET {{Host}}/weatherforecast/
 Accept: application/json
 
 ######
-GET https://localhost:7268/api/FinanceMonth/2024/8
+GET {{Host}}/api/FinanceMonth/{{account}}/2024/8
 Authorization: Bearer {{Token}}
 
 ###
-POST https://localhost:7268/api/FinanceMonth/2024/8/incomes
+POST {{Host}}/api/FinanceMonth/{{account}}/2024/8/incomes
 content-type: application/json
 Authorization: Bearer {{Token}}
 
@@ -22,7 +22,7 @@ Authorization: Bearer {{Token}}
 }
 
 ###
-POST https://localhost:7268/api/FinanceMonth/2024/8/expenses
+POST https://localhost:7268/api/FinanceMonth/{{account}}/2024/8/expenses
 content-type: application/json
 Authorization: Bearer {{Token}}
 

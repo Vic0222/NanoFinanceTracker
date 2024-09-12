@@ -33,6 +33,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             {
                 Year = State.Year,
                 Month = State.Month,
+                Account = State.Account,
                 Balance = State.Balance,
                 TotalExpense = State.TotalExpense,
                 TotalIncome = State.TotalIncome,
@@ -84,17 +85,19 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
 
         public async Task<KeyValuePair<int, FinanceMonthState>> ReadStateFromStorage()
         {
-            (int year, int month, string userId) = ParseFinanceMonthId(this.GetPrimaryKeyString());
+            (int year, int month, string userId, string account) = ParseFinanceMonthId(this.GetPrimaryKeyString());
 
             Guard.IsGreaterThan(year, 0, "FinanceMonth - Year");
             Guard.IsBetween(month, 1, 12, "FinanceMonth - Month");
             Guard.IsNotNullOrEmpty(userId, "FinanceMonth - UserId");
+            Guard.IsNotNullOrEmpty(account, "FinanceMonth - Account");
 
             var state = new FinanceMonthState()
             {
                 Year = year,
                 Month = month,
-                UserId = userId
+                UserId = userId,
+                Account = account
             };
 
             var events = await _aggregateRepository.LoadEventsAsync<IFinanceMonthEvent>(this.GetPrimaryKeyString());
@@ -123,24 +126,28 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             long version = orderedEvents.LastOrDefault().version;
             return new KeyValuePair<int, FinanceMonthState>((int)version, state);
         }
-        private static (int year, int month, string userId) ParseFinanceMonthId(string id)
+        private static (int year, int month, string userId, string account) ParseFinanceMonthId(string id)
         {
             
-            if (id.Length < 9)
+            if (string.IsNullOrEmpty(id))
             {
-                return (0, 0, string.Empty);
+                return (0, 0, string.Empty, string.Empty);
             }
 
-            //sample id 2024-08-id
-            var idSpan = id.AsSpan();
-            var strYear = idSpan.Slice(0, 4);
-            var strMonth = idSpan.Slice(5, 2);
-            var userId = idSpan.Slice(8, idSpan.Length - 8).ToString();
+            var parts = id.Split('-');
+
+
+            //sample id 2024-08-id-account
+
+            var strYear = parts.ElementAtOrDefault(0);
+            var strMonth = parts.ElementAtOrDefault(1);
+            var userId = parts.ElementAtOrDefault(2) ?? string.Empty;
+            var account = parts.ElementAtOrDefault(3) ?? string.Empty;
 
             int.TryParse(strYear, out int year);    
             int.TryParse(strMonth, out int month);
 
-            return (year, month, userId);
+            return (year, month, userId, account);
         }
     }
 

@@ -4,6 +4,8 @@
     {
         public string UserId { get; set; } = string.Empty;
 
+        public string Account { get; set; } = string.Empty;
+
         public int Month { get; set; }
 
         public int Year { get; set; }
