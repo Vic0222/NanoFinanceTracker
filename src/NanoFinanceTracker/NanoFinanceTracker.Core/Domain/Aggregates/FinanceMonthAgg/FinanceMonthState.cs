@@ -21,6 +21,7 @@
         public void Apply(ExpenseAdded @event)
         {
             FinancialTransactions.Add(new FinancialTransaction { 
+                Account = @event.Account ?? Account,
                 Amount = @event.Amount,
                 Category = @event.Category,
                 CreatedAt = @event.CreatedAt,
@@ -38,6 +39,7 @@
         {
             FinancialTransactions.Add(new FinancialTransaction
             {
+                Account = @event.Account ?? Account,
                 Amount = @event.Amount,
                 Category = @event.Category,
                 CreatedAt = @event.CreatedAt,
@@ -59,6 +61,7 @@
 
     public class FinancialTransaction
     {
+        public string Account { get; set; } = string.Empty;
 
         public DateTimeOffset TransactionDate { get; set; }
 

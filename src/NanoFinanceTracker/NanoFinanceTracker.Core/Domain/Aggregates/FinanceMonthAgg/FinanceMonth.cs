@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 using NanoFinanceTracker.Core.Application.Dtos.Commands;
 using NanoFinanceTracker.Core.Application.Dtos.Views;
 using NanoFinanceTracker.Core.Domain.DomainInteraces;
 using NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces;
+using Npgsql.Internal;
 using Orleans;
 using Orleans.EventSourcing;
 using Orleans.EventSourcing.CustomStorage;
@@ -42,10 +44,28 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             return Task.FromResult(view);
         }
 
+        public Task<List<FinancialTransactionView>> GetFinancialTransactions()
+        {
+            var breakDown = State.FinancialTransactions
+                .Select(ft => new FinancialTransactionView
+                {
+                    Account = ft.Account,
+                    Amount = ft.Amount,
+                    Category = ft.Category,
+                    CreatedAt = ft.CreatedAt,
+                    Description = ft.Description,
+                    TransactionDate = ft.TransactionDate,
+                    TransactionType = ft.TransactionType
+                }).ToList();
+
+            return Task.FromResult(breakDown);
+        }
+
         public async Task AddExpense(AddExpenseCommand command)
         {
             RaiseEvent(new ExpenseAdded() {
                 FinanceMonthId = this.GetPrimaryKeyString(),
+                Account = State.Account,
                 Amount = command.Amount,
                 Category = command.Category,
                 Description = command.Description,
@@ -60,6 +80,7 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             RaiseEvent(new IncomeAdded()
             {
                 FinanceMonthId = this.GetPrimaryKeyString(),
+                Account = State.Account,
                 Amount = command.Amount,
                 Category = command.Category,
                 Description = command.Description,

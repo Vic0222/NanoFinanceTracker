@@ -14,6 +14,7 @@ namespace NanoFinanceTracker.Core.Framework.Orleans.GrainInterfaces
     {
         Task AddExpense(AddExpenseCommand command);
         Task AddIncome(AddIncomeCommand command);
+        Task<List<FinancialTransactionView>> GetFinancialTransactions();
         Task<FinanceMonthView> GetStateView();
     }
 }

@@ -36,6 +36,20 @@ namespace NanoFinanceTracker.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("{account}/{year}/{month}/transactions")]
+        public async Task<IActionResult> GetTransactions(string account, int year, int month)
+        {
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var grain = _clusterClient.GetGrain<IFinanceMonthGrain>(BuildGrainId(year, month, userId, account));
+
+            return Ok(await grain.GetFinancialTransactions());
+        }
+
+        [Authorize]
         [HttpPost("{account}/{year}/{month}/expenses")]
         public async Task<IActionResult> PostExpense([FromServices] IValidator<AddExpenseCommand> validator, string account, int year, int month,[FromBody] AddExpenseCommand command)
         {

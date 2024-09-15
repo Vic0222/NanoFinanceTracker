@@ -9,6 +9,8 @@
     {
         public string FinanceMonthId { get; set; } = string.Empty;
 
+        public string Account { get; set; } = string.Empty;
+
         public int Amount { get; set; }
 
         public string Category { get; set; } = string.Empty;
@@ -24,6 +26,8 @@
     public class IncomeAdded : IFinanceMonthEvent
     {
         public string FinanceMonthId { get; set; } = string.Empty;
+
+        public string Account { get; set; } = string.Empty;
 
         public int Amount { get; set; }
 
