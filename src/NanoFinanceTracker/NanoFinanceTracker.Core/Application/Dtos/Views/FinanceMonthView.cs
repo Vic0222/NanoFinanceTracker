@@ -22,12 +22,12 @@ namespace NanoFinanceTracker.Core.Application.Dtos.Views
         public int Year { get; set; }
 
         [Id(3)]
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
         [Id(4)]
-        public int TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
 
         [Id(5)]
-        public int TotalIncome { get; set; }
+        public decimal TotalIncome { get; set; }
     }
 }

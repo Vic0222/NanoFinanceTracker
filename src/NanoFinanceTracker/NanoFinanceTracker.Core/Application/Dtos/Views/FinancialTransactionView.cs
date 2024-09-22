@@ -19,7 +19,7 @@ namespace NanoFinanceTracker.Core.Application.Dtos.Views
         public string TransactionType { get; set; } = string.Empty;
 
         [Id(3)]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Id(4)]
         public string Category { get; set; } = string.Empty;

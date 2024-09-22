@@ -10,11 +10,11 @@
 
         public int Year { get; set; }
 
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
-        public int TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
 
-        public int TotalIncome { get; set; }
+        public decimal TotalIncome { get; set; }
 
         public List<FinancialTransaction> FinancialTransactions { get; set; } = new List<FinancialTransaction>();
 
@@ -67,7 +67,7 @@
 
         public string TransactionType { get; set; } = string.Empty;
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string Category { get; set; } = string.Empty;
 

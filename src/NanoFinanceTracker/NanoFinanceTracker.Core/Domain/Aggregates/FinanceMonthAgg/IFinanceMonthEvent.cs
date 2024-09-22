@@ -11,7 +11,7 @@
 
         public string Account { get; set; } = string.Empty;
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string Category { get; set; } = string.Empty;
 
@@ -29,7 +29,7 @@
 
         public string Account { get; set; } = string.Empty;
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string Category { get; set; } = string.Empty;
 
