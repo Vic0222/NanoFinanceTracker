@@ -10,7 +10,7 @@ namespace NanoFinanceTracker.Core.Application.Dtos.Commands
     public class AddExpenseCommand
     {
         [Id(0)]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         [Id(1)]
         public string Description { get; set; } = string.Empty;
         [Id(2)]
