@@ -96,7 +96,7 @@ namespace NanoFinanceTracker.WebApi.Controllers
 
         private static string BuildGrainId(int year, int month, string userId, string account)
         {
-            return $"{year.ToString("0000")}-{month.ToString("00")}-{userId.Replace("-", "_")}-{account.ToLower().Replace("-","_")}";
+            return $"#4-{year.ToString("0000")}#2-{month.ToString("00")}#{userId.Length}-{userId}#{account.Length}-{account.ToLower()}";
         }
     }
 }

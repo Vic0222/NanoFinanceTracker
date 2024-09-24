@@ -9,6 +9,12 @@
     {
         public string FinanceMonthId { get; set; } = string.Empty;
 
+        public int Year { get; set; }
+
+        public int Month { get; set; }
+
+        public string UserId { get; set; } = string.Empty;
+
         public string Account { get; set; } = string.Empty;
 
         public decimal Amount { get; set; }
@@ -26,6 +32,12 @@
     public class IncomeAdded : IFinanceMonthEvent
     {
         public string FinanceMonthId { get; set; } = string.Empty;
+
+        public int Year { get; set; }
+
+        public int Month { get; set; }
+
+        public string UserId { get; set; } = string.Empty;
 
         public string Account { get; set; } = string.Empty;
 

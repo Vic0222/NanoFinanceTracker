@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using NanoFinanceTracker.Core.Application.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NanoFinanceTracker.Core.Projections.AccountProjections;
+using Marten.Events.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +65,8 @@ builder.Services.AddMarten(options =>
     // Establish the connection string to your Marten database
     options.Connection(builder.Configuration.GetConnectionString("Marten")!);
 
+    
+
     options.Events.StreamIdentity = Marten.Events.StreamIdentity.AsString;
     // Specify that we want to use STJ as our serializer
     options.UseSystemTextJsonForSerialization();
@@ -78,6 +82,8 @@ builder.Services.AddMarten(options =>
         options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
 
     }
+
+    options.Projections.Add<AccountProjection>(ProjectionLifecycle.Inline);
 });
 
 // Add services to the container.

@@ -12,6 +12,7 @@ using Orleans.EventSourcing.CustomStorage;
 using Orleans.Serialization.Codecs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,9 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
         {
             RaiseEvent(new ExpenseAdded() {
                 FinanceMonthId = this.GetPrimaryKeyString(),
+                Year = State.Year,
+                Month = State.Month,
+                UserId = State.UserId,
                 Account = State.Account,
                 Amount = command.Amount,
                 Category = command.Category,
@@ -80,6 +84,9 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             RaiseEvent(new IncomeAdded()
             {
                 FinanceMonthId = this.GetPrimaryKeyString(),
+                Year = State.Year,
+                Month = State.Month,
+                UserId = State.UserId,
                 Account = State.Account,
                 Amount = command.Amount,
                 Category = command.Category,
@@ -147,25 +154,86 @@ namespace NanoFinanceTracker.Core.Domain.Aggregates.FinanceMonthAgg
             long version = orderedEvents.LastOrDefault().version;
             return new KeyValuePair<int, FinanceMonthState>((int)version, state);
         }
-        private static (int year, int month, string userId, string account) ParseFinanceMonthId(string id)
+
+
+        public static (int year, int month, string userId, string account) ParseFinanceMonthId(string id)
         {
-            
-            if (string.IsNullOrEmpty(id))
+
+            if (string.IsNullOrEmpty(id) || id[0] != '#')
             {
                 return (0, 0, string.Empty, string.Empty);
             }
 
-            var parts = id.Split('-');
 
 
-            //sample id 2024-08-id-account
+            //sample id #4-2024#2-08#2-id#7-account
+        
+            int dataIndex = 0;
+            char previousMark = '#';
+            StringBuilder dataLengthString = new StringBuilder();
+            int dataLength = 0;
 
-            var strYear = parts.ElementAtOrDefault(0);
-            var strMonth = parts.ElementAtOrDefault(1);
-            var userId = parts.ElementAtOrDefault(2) ?? string.Empty;
-            var account = parts.ElementAtOrDefault(3) ?? string.Empty;
+            string strYear = string.Empty;
+            string strMonth = string.Empty;
+            string userId = string.Empty;
+            string account = string.Empty;
 
-            int.TryParse(strYear, out int year);    
+            const char startDelimiter = '#';
+            const char middleDelimiter = '-';
+
+            for (int i = 0; i < id.Length; i++)
+            {
+                char current = id[i];
+                if (previousMark == middleDelimiter && current != startDelimiter)
+                {
+                    break;
+                }
+                if (current == startDelimiter)
+                {
+                    previousMark = startDelimiter;
+                    continue;
+                }
+                if (previousMark == startDelimiter && current == middleDelimiter)
+                {
+                    dataLength = int.Parse(dataLengthString.ToString());
+                    dataLengthString.Clear();
+                    var data = id.Substring(i + 1, dataLength);
+                    i = i + dataLength;
+                    switch (dataIndex)
+                    {
+                        case 0:
+                            strYear = data ;
+                            break;
+                        case 1:
+                            strMonth = data;
+                            break;
+                        case 2:
+                            userId = data;
+                            break;
+                        case 3:
+                            account = data;
+                            break;
+                        default:
+                            break;
+                    }
+                    dataIndex++;
+                    previousMark = middleDelimiter;
+                    continue;
+                }
+                if (previousMark == startDelimiter)
+                {
+                    if (char.IsNumber(current))
+                    {
+                        dataLengthString.Append(current);
+                    }
+                    continue;
+                }
+
+            }
+
+            
+
+            int.TryParse(strYear, out int year);
             int.TryParse(strMonth, out int month);
 
             return (year, month, userId, account);
