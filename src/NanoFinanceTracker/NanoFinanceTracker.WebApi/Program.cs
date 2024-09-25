@@ -90,6 +90,8 @@ builder.Services.AddMarten(options =>
 builder.Services.AddTransient<IAggregateRepository, AggregateRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddExpenseValidator>();
 
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

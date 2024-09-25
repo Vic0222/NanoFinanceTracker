@@ -38,5 +38,7 @@ Authorization: Bearer {{Token}}
   "transactionDate": "2024-08-24T14:28:04.256Z"
 }
 
-### Login
-
+###
+GET https://localhost:7268/api/Accounts
+content-type: application/json
+Authorization: Bearer {{Token}}

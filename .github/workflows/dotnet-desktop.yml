@@ -1,5 +1,8 @@
 name: Fly Deploy
-on: [workflow_dispatch]
+on: 
+  push:
+    branches:
+      - 'master'
 
 defaults:
   run:
